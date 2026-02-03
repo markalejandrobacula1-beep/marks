@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mark & Elena 💖 7 Months</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle at top, #ff4d6d, #ff9a9e, #ffd1dc);
+  font-family: 'Poppins', Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 25px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+h1 { color: #ff3366; margin: 0; }
+h2 { color: #ff6699; margin: 5px 0 15px; }
+p { color: #333; font-size: 18px; }
+
+input {
+  padding: 12px;
+  width: 80%;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+button {
+  padding: 12px 20px;
+  margin-top: 15px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: #ff3366;
+  color: white;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.hidden { display: none; }
+
+.no {
+  background: #ddd;
+  color: #333;
+  position: absolute;
+}
+
+.heart {
+  position: absolute;
+  font-size: 24px;
+  animation: float 4s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+
+.firework {
+  position: absolute;
+  font-size: 30px;
+  animation: explode 1.2s ease-out forwards;
+}
+
+@keyframes explode {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+.cat {
+  position: absolute;
+  width: 80px;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+#countdown {
+  font-size: 20px;
+  color: #ff3366;
+  margin-top: 10px;
+}
+
+#letter {
+  font-size: 18px;
+  color: #ff3366;
+  line-height: 1.5;
+  text-align: center;
+  margin-top: 15px;
+}
+</style>
+</head>
+<body>
+
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9c5c2f6f55.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PASSWORD LOCK -->
+<div class="card" id="lock">
+  <h1>🔒 Private Page</h1>
+  <p>Only for Elena 💕</p>
+  <input type="password" id="password" placeholder="Enter our monthsary date 😏">
+  <button onclick="unlock()">Unlock 💖</button>
+  <p id="error" style="color:red; display:none;">Wrong password 😜</p>
+</div>
+
+<!-- MAIN VALENTINE PAGE -->
+<div class="card hidden" id="main">
+  <h1>Hi Elena 😘</h1>
+  <h2>🎉 7 Months Together! 🎉</h2>
+  <p>Valentine’s Day is almost here… 💕</p>
+  <div id="countdown"></div>
+  <p>Will you be my Valentine? 💖</p>
+  <button id="yesBtn" onclick="yes()">YES 💘</button>
+  <button class="no" id="noBtn">NO 😈</button>
+  <p style="margin-top:15px;">From: Mark ❤️ To: Elena</p>
+</div>
+
+<!-- FINAL CELEBRATION -->
+<div class="card hidden" id="final">
+  <h1>🎆 You did it! 🎆</h1>
+  <h2>7 months + Valentine’s Day 💕</h2>
+  <p>Happy Valentine’s Day and happy 7 months, my love! 💖</p>
+  <div id="letter">
+    Dear Elena, 💌<br><br>
+    Every moment with you makes my heart smile. These 7 months together have been the happiest of my life.  
+    On this Valentine’s Day, I just want you to know how much I love you and how special you are to me.  
+    Thank you for being my everything. 💕<br><br>
+    Love always,<br>
+    Mark ❤️
+  </div>
+</div>
+
+<script>
+const correctPassword = "07142025";
+const music = document.getElementById("music");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+
+// Countdown
+const valentinesDate = new Date("February 14, 2026 00:00:00").getTime();
+const countdownEl = document.getElementById("countdown");
+setInterval(() => {
+  const now = new Date().getTime();
+  const diff = valentinesDate - now;
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff/(1000*60*60))%24);
+  const m = Math.floor((diff/(1000*60))%60);
+  const s = Math.floor((diff/1000)%60);
+  countdownEl.innerHTML = `⏳ ${d}d ${h}h ${m}m ${s}s`;
+}, 1000);
+
+function unlock() {
+  if(document.getElementById("password").value === correctPassword){
+    document.getElementById("lock").classList.add("hidden");
+    document.getElementById("main").classList.remove("hidden");
+    music.play();
+    hearts();
+    chaosNo(); // start infinite NO chaos
+  } else { document.getElementById("error").style.display = "block"; }
+}
+
+// Infinite NO button chaos (YES button stays the same)
+function chaosNo() {
+  noBtn.addEventListener("mouseenter", () => {
+    // Move NO button randomly forever
+    noBtn.style.left = Math.random()*80 + "%";
+    noBtn.style.top = Math.random()*80 + "%";
+    // Show animated cat
+    showCat();
+    // Continue infinite chaos
+    setTimeout(() => chaosNo(), 200); // repeat
+  });
+}
+
+// Animated cat pop-up
+function showCat() {
+  const cat = document.createElement("img");
+  cat.className = "cat";
+  cat.src = Math.random() > 0.5 ? 
+    "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" : 
+    "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif";
+  cat.style.left = Math.random()*70 + "%";
+  cat.style.top = Math.random()*70 + "%";
+  document.body.appendChild(cat);
+  setTimeout(()=>cat.remove(), 2000);
+}
+
+function yes() {
+  document.getElementById("main").classList.add("hidden");
+  document.getElementById("final").classList.remove("hidden");
+  fireworks();
+}
+
+function hearts(){
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="💖";
+    h.style.left=Math.random()*100+"vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  },300);
+}
+
+function fireworks(){
+  for(let i=0;i<50;i++){
+    const f=document.createElement("div");
+    f.className="firework";
+    f.textContent="🎆";
+    f.style.left=Math.random()*100+"vw";
+    f.style.top=Math.random()*100+"vh";
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1200);
+  }
+}
+</script>
+</body>
+</html>
